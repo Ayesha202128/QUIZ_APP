@@ -14,8 +14,7 @@ main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: blue));
   await Supabase.initialize(
       url: "https://ntycdtmuyzsymqbbkdwp.supabase.co",
-      anonKey:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50eWNkdG11eXpzeW1xYmJrZHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNjAwNTEsImV4cCI6MjA3MTkzNjA1MX0.rwFYZdaX3hfjhGK1AP2snkb34UXkn_mOFVtb4qEdUVg");
+      anonKey:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50eWNkdG11eXpzeW1xYmJrZHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNjAwNTEsImV4cCI6MjA3MTkzNjA1MX0.rwFYZdaX3hfjhGK1AP2snkb34UXkn_mOFVtb4qEdUVg");
 
   runApp(const App());
 }
@@ -27,7 +26,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const QuizApp(),
+      home: const SignInPage(),
       theme: ThemeData(
         fontFamily: "quick",
       ),

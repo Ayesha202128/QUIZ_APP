@@ -16,7 +16,7 @@ Future<AuthResponse>signInWithEmailPassword(
   )
   async{
 
-//sihn in request 
+//signin in request 
 
 return await _supabase.auth.signInWithPassword(
   email: email,  
@@ -40,17 +40,15 @@ Future<AuthResponse>signUpWithEmailPassword(
 
 Future<void>signOut()async{
   return await _supabase.auth.signOut();
-
-String? getCurrentUserEmail(){
-
-final Session = _supabase.auth.currentSession;
-
-final User = Session?.user;
-
-return User?.email;
-
-
 }
-
+String? getCurrentUserEmail(){
+final session = _supabase.auth.currentSession;
+final user = session?.user;
+return user?.email;
+}
+String? getCurrentUserUid(){
+final session = _supabase.auth.currentSession;
+final user = session?.user;
+return user?.id;
 }
 }
