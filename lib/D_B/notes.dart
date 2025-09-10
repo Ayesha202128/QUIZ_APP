@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NotesDatabase{
 
-final table =Supabase.instance.client.from('table_create');     //table pic kore rakci mane table er access pabo.
+final table =Supabase.instance.client.from('table_create');     //table pic kore rakci mane table er access pawa jabe.
 final authservice=AuthService();                                //object neya hice
 //insert
 
