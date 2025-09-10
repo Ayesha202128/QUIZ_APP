@@ -1,0 +1,76 @@
+
+import 'package:project_app/D_B/notes.dart';
+import 'package:flutter/material.dart';
+import 'package:project_app/const/colors.dart';                    // <-- যদি blue color const থেকে নাও
+
+class NotePage extends StatefulWidget {
+  const NotePage({super.key});
+
+  @override
+  State<NotePage> createState() => _NotePageState();
+}
+
+class _NotePageState extends State<NotePage> {
+  final _noteController = TextEditingController();
+  final notesdb = NotesDatabase();                                   // access paici notes databaee
+
+  void addNewNotes() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              //alert dialog mane dialog box show korbe
+              title: Text("Add new note"),
+              content: TextField(
+                controller: _noteController,
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);                        //navigator.pop mane cancel hoye jabe context ta
+                      _noteController.clear();                       //note controller cole jabe
+                    },
+                    child: Text("Cancel")),
+                TextButton(
+                    onPressed: () async {
+                      //akn save er kaj
+                      try {
+                        final newNote = _noteController.text;
+                        await notesdb
+                            .createNotes(_noteController.text);      //notesdb er acces pabo karon obj create korar jonoo
+
+                        if (mounted) {
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(
+                              SnackBar(content: Text("Insertion done")));
+                        }
+                      } catch (e) {
+                        if (mounted) {
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text("Error :$e")));
+                        }
+                      }
+                    },
+                    child: Text("Save")),
+              ],
+            ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+       backgroundColor: const Color.fromARGB(255, 160, 184, 255),                                       // <-- CHANGED: Background color blue
+      appBar: AppBar(
+        title: const Text(
+          "Notes",
+          style: TextStyle(color: Color.fromARGB(255, 15, 54, 230)),                   // <-- CHANGED: Title white
+        ),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 160, 184, 255),                                     // <-- Optional: AppBar background same blue
+      ),
+      floatingActionButton:
+          FloatingActionButton(onPressed: addNewNotes, child: Icon(Icons.add)),
+    );
+  }
+}
