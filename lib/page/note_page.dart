@@ -21,7 +21,7 @@ class _NotePageState extends State<NotePage> {
         context: context,
         builder: (context) => AlertDialog(
               //alert dialog mane dialog box show korbe
-              title: Text("Add new note"),
+              title: Text("Add New Note"),
               content: TextField(
                 controller: _noteController,
               ),
