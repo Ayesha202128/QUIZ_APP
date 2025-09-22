@@ -1,13 +1,12 @@
-
-
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:project_app/api_services.dart';
 import 'package:project_app/const/colors.dart';
 import 'package:project_app/const/images.dart';
 import 'package:project_app/const/text_style.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:project_app/page/note_page.dart';
+import 'package:project_app/page/result_page.dart';
+import 'package:project_app/page/result_page.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({Key? key}) : super(key: key);
@@ -23,6 +22,9 @@ class _QuizScreenState extends State<QuizScreen> {
   late Future quiz;
 
   int points = 0;
+  int correctAnswers = 0;
+  int incorrectAnswers = 0;
+  bool answered = false;
 
   var isLoaded = false;
   var optionsList = [];
@@ -55,6 +57,7 @@ class _QuizScreenState extends State<QuizScreen> {
       Colors.white,
       Colors.white,
     ];
+    answered = false;
   }
 
   startTimer() {
@@ -63,6 +66,10 @@ class _QuizScreenState extends State<QuizScreen> {
         if (seconds > 0) {
           seconds--;
         } else {
+          // time up, count as incorrect if not answered
+          if (!answered) {
+            incorrectAnswers++;
+          }
           gotoNextQuestion();
         }
       });
@@ -81,7 +88,13 @@ class _QuizScreenState extends State<QuizScreen> {
       if (currentQuestionIndex >= totalQuestions) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const NotePage()),
+          MaterialPageRoute(
+            builder: (_) => ResultPage(
+              totalQuestions: totalQuestions,
+              correctAnswers: correctAnswers,
+              incorrectAnswers: incorrectAnswers,
+            ),
+          ),
         );
       } else {
         startTimer();
@@ -121,7 +134,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
                 return Column(
                   children: [
-                    // Top row (close, timer, like)
+                    // Top row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -179,7 +192,6 @@ class _QuizScreenState extends State<QuizScreen> {
 
                     const SizedBox(height: 20),
 
-                    // Image
                     Flexible(
                       flex: 2,
                       child: Image.asset(ideas, width: 180),
@@ -187,7 +199,6 @@ class _QuizScreenState extends State<QuizScreen> {
 
                     const SizedBox(height: 20),
 
-                    // Question counter
                     Align(
                       alignment: Alignment.centerLeft,
                       child: normalText(
@@ -200,7 +211,6 @@ class _QuizScreenState extends State<QuizScreen> {
 
                     const SizedBox(height: 10),
 
-                    // Question text
                     normalText(
                       color: Colors.white,
                       size: 20,
@@ -209,11 +219,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
                     const SizedBox(height: 20),
 
-                    // Options (Expanded makes it take remaining space)
                     Expanded(
                       flex: 4,
                       child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(), // no scroll
+                        physics:
+                            const NeverScrollableScrollPhysics(), // no scroll
                         itemCount: optionsList.length,
                         itemBuilder: (BuildContext context, int index) {
                           var answer =
@@ -221,26 +231,38 @@ class _QuizScreenState extends State<QuizScreen> {
                           return GestureDetector(
                             onTap: () {
                               setState(() {
+                                if (answered) return;
+                                answered = true;
+
                                 if (answer.toString() ==
                                     optionsList[index].toString()) {
                                   optionsColor[index] = Colors.green;
                                   points += 10;
+                                  correctAnswers++;
                                 } else {
                                   optionsColor[index] = Colors.red;
+                                  incorrectAnswers++;
                                 }
 
-                                if (currentQuestionIndex < data.length - 1) {
-                                  Future.delayed(const Duration(seconds: 1),
-                                      () {
+                                if (currentQuestionIndex <
+                                    data.length - 1) {
+                                  Future.delayed(
+                                      const Duration(seconds: 1), () {
                                     gotoNextQuestion();
                                   });
-                                }else {
+                                } else {
                                   timer?.cancel();
-                                  Future.delayed(const Duration(seconds: 1), () {
+                                  Future.delayed(
+                                      const Duration(seconds: 1), () {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) => const NotePage()),
+                                        builder: (_) => ResultPage(
+                                          totalQuestions: data.length,
+                                          correctAnswers: correctAnswers,
+                                          incorrectAnswers: incorrectAnswers,
+                                        ),
+                                      ),
                                     );
                                   });
                                 }

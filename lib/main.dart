@@ -8,7 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:project_app/page/note_page.dart';
+import 'package:project_app/page/result_page.dart';
+
 
 main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: blue));
@@ -55,7 +56,7 @@ class QuizApp extends StatelessWidget {
               colors: [blue, darkBlue],
             ),
           ),
-          child: Stack( // <-- CHANGED: Wrapped children in a Stack to position X button independently
+          child: Stack(                      
             children: [
               // X button at top-left
               Positioned(
@@ -78,9 +79,9 @@ class QuizApp extends StatelessWidget {
               ),
 
               // Centered column
-              Center( // <-- CHANGED: Center widget added to vertically center balloon & text
+              Center(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min, // <-- CHANGED: Ensures column only takes needed height
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(balloon2, width: 200),
                     const SizedBox(height: 20),

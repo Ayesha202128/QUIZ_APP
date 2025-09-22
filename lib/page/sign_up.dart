@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_app/const/images.dart';
 import 'sign_in.dart';
 import '../quiz_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; 
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -15,7 +16,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _passwordController = TextEditingController();
   final _confirmPassController = TextEditingController();
 
-  void signUp() {
+  Future<void> signUp() async { 
     final email = _emailController.text;
     final password = _passwordController.text;
     final confirmPassword = _confirmPassController.text;
@@ -34,16 +35,27 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Registration Successful")),
-    );
-
-    
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const QuizScreen()),
-    // );
+    try {
+      final response = await Supabase.instance.client.auth
+          .signUp(email: email, password: password); 
+      if (response.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Registration Successful")),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const QuizScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Signup failed")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
   }
 
   @override
@@ -53,25 +65,23 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       body: Stack(
         children: [
-            // 1️⃣ Pink background overlay
           Container(
             width: size.width,
             height: size.height,
-            color: const Color.fromARGB(255, 160, 184, 255), // এখানে চাইলে অন্য shade দিতে পারো
+            color: const Color.fromARGB(255, 160, 184, 255),
           ),
-          // Background Image
           Flexible(
-                      flex: 2,
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Image.asset(balloon2, width: 180)),
-                    ),
-
+            flex: 2,
+            child: Align(
+                alignment: Alignment.topCenter,
+                child: Image.asset(balloon2, width: 180)),
+          ),
           Align(
             alignment: const Alignment(0, 0.9),
             child: Container(
               width: size.width * 0.6,
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(30),
@@ -124,7 +134,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 68, 106, 233),
-                      foregroundColor: Colors.white, 
+                      foregroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 45),
                     ),
                     onPressed: signUp,
