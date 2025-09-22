@@ -1,4 +1,3 @@
-// project_app/page/result_page.dart
 
 import 'package:flutter/material.dart';
 import 'package:project_app/const/colors.dart';
@@ -45,7 +44,7 @@ class ResultPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
 
-                Image.asset(ideas, width: 180),
+                Image.asset(balloon2, width: 180),
                 headingText(color: Colors.white, size: 32, text: "🎉 Congratulations!"),
                 const SizedBox(height: 30),
 

@@ -1,4 +1,3 @@
-// project_app/D_B/results_db.dart
 
 import 'package:project_app/auth/auth_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -29,7 +28,6 @@ class ResultsDatabase {
     await table.delete().eq('id', id);
   }
 
-  // Return the stream (used by StreamBuilder)
   Stream<dynamic> getResultsStream() {
     return table.stream(primaryKey: ['id']);
   }

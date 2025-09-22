@@ -6,7 +6,7 @@ import 'package:project_app/const/colors.dart';
 import 'package:project_app/const/images.dart';
 import 'package:project_app/const/text_style.dart';
 import 'package:project_app/page/result_page.dart';
-import 'package:project_app/page/result_page.dart';
+
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({Key? key}) : super(key: key);
